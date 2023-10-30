@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/sweetalert2.min.css">
+    <style>
+        #datosSerie{
+            border: 2px solid gray;
+            border-radius: 10px;
+            padding: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img style="width:8rem ;" id="img_logo" src="/assets/images/logo.webp" alt="img_navabar"/>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Series
+                        </a>
+                        <ul id="menu_desplegable" class="dropdown-menu">
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="nuevoPersonaje.html">Nuevo Personaje</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Modificar Personaje</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br />
+    <div class="container">
+        <div id="datosSerie">
+
+        </div>
+    </div>
+
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/sweetalert2.min.js"></script>
+    <script>
+        let URL_ApiSeries = "https://apiseriespersonajes.azurewebsites.net/";
+        //Aqui dentro se desarrolla todo el codigo de jquery que necesitaremos
+        $(document).ready(function(){
+            let request = "api/series";
+            $.ajax({
+                url: URL_ApiSeries + request,
+                type: "GET",
+                success: function(data){
+                    // console.log("Leyendo servicio");
+                    let html = "";
+                    $.each(data, function(index,serie){
+                        html += `<li><a class='dropdown-item' href='serie.html?idserie=${serie.idSerie}'>${serie.nombre}</a></li>`
+                    });
+                    $("#menu_desplegable").html(html);
+                }
+            })
+
+            let params = new URLSearchParams(location.search);
+            let idSerie = params.get("idserie");
+            console.log(idSerie);
+            let requestGetSerie = `api/series/${idSerie}`;
+            $.ajax({
+                url: URL_ApiSeries + requestGetSerie,
+                type: "GET",
+                success: function(data){
+                    let html = "";
+                    html += `<h1>${data.nombre}</h1>`;
+                    html += `<img id='img_madrid' id='img_serie' src=${data.imagen} alt='img_equipo' width=500/><br/><br/>`;
+                    html += `<h3>Puntuación: ${data.puntuacion}</h3>`
+                    html += `<p>Año: ${data.anyo}</p>`
+                    html += `<a href='personajes.html?idserie=${data.idSerie}' class='btn btn-primary'>Personajes</a>`
+                    $("#datosSerie").html(html);
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>
