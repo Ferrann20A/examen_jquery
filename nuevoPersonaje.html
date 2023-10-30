@@ -13,7 +13,7 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">
-                <img style="width:8rem ;" id="img_logo" src="/assets/images/logo.webp" alt="img_navabar"/>
+                <img style="width:8rem ;" id="img_logo" src="/assets/images/logo.webp" alt="img_navabar" />
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,8 @@
                         <a class="nav-link active" aria-current="page" href="nuevoPersonaje.html">Nuevo Personaje</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Modificar Personaje</a>
+                        <a class="nav-link active" aria-current="page" href="modificarPersonaje.html">Modificar
+                            Personaje</a>
                     </li>
                 </ul>
             </div>
@@ -44,7 +45,22 @@
     </nav>
     <br />
     <div class="container">
-        <h1>Nuevo Personaje</h1>
+        <div class="container mx-auto d-block">
+            <h1 class="text-success">Nuevo Personaje</h1>
+            <label class="form-label">Id</label>
+            <input type="number" id="cajaId" class="form-control">
+            <label class="form-label">Nombre</label>
+            <input type="text" id="cajaNombre" class="form-control">
+            <label class="form-label">Imagen</label>
+            <input type="text" id="cajaImagen" class="form-control">
+            <label class="form-label">Series</label>
+            <select id="series" class="form-control">
+
+            </select>
+            <br />
+            <button class="btn btn-outline-dark" id="insertaPersonaje">Insertar Personaje</button>
+        </div><br/>
+        <span class="text-success text-uppercase" id="mensaje"></span>
     </div>
 
     <script src="js/jquery-3.7.1.min.js"></script>
@@ -53,20 +69,61 @@
     <script>
         let URL_ApiSeries = "https://apiseriespersonajes.azurewebsites.net/";
         //Aqui dentro se desarrolla todo el codigo de jquery que necesitaremos
-        $(document).ready(function(){
+        $(document).ready(function () {
             let request = "api/series";
             $.ajax({
                 url: URL_ApiSeries + request,
                 type: "GET",
-                success: function(data){
+                success: function (data) {
                     console.log("Leyendo servicio");
                     let html = "";
-                    $.each(data, function(index,serie){
+                    $.each(data, function (index, serie) {
                         html += `<li><a class='dropdown-item' href='serie.html?idserie=${serie.idSerie}'>${serie.nombre}</a></li>`
                     });
                     $("#menu_desplegable").html(html);
                 }
+            });
+
+            let requestGetSeries = "api/series";
+            $.ajax({
+                url: URL_ApiSeries + requestGetSeries,
+                type: "GET",
+                success: function (data) {
+                    let html = "";
+                    $.each(data, function (index, serie) {
+                        html += `<option value=${serie.idSerie}>${serie.nombre}</option>`;
+                    });
+                    $("#series").html(html);
+                }
+
             })
+
+            $("#insertaPersonaje").click(function(){
+                let idPersonaje = parseInt($("#cajaId").val());
+                let nombrePersonaje = $("#cajaNombre").val();
+                let imgPersonaje = $("#cajaImagen").val();
+                let valueSerie = parseInt($("#series").val());
+                let personaje = new Object();
+                personaje.idPersonaje = idPersonaje;
+                personaje.nombre = nombrePersonaje;
+                personaje.imagen = imgPersonaje;
+                personaje.idSerie = valueSerie;
+                let dataJSON = JSON.stringify(personaje);
+                console.log(personaje);
+                let requestPOSTpersonaje = "api/personajes";
+                $.ajax({
+                    url: URL_ApiSeries + requestPOSTpersonaje,
+                    type: "POST",
+                    contentType: "application/json",
+                    data: dataJSON,
+                    success: function(){
+                        console.log("Insertado correctamente!");
+                        let html = "Personaje insertado correctamente!!"
+                        $("#mensaje").html(html);
+                    }
+                })
+            })
+
         })
     </script>
 </body>

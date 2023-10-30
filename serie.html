@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="css/sweetalert2.min.css">
     <style>
         #datosSerie{
-            border: 2px solid gray;
+            border: 1px solid gray;
             border-radius: 10px;
             padding: 1rem;
+            width: 35rem;
         }
     </style>
 </head>
@@ -43,7 +44,7 @@
                         <a class="nav-link active" aria-current="page" href="nuevoPersonaje.html">Nuevo Personaje</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Modificar Personaje</a>
+                        <a class="nav-link active" aria-current="page" href="modificarPersonaje.html">Modificar Personaje</a>
                     </li>
                 </ul>
             </div>
@@ -51,7 +52,7 @@
     </nav>
     <br />
     <div class="container">
-        <div id="datosSerie">
+        <div class="mx-auto d-block" id="datosSerie">
 
         </div>
     </div>
@@ -86,11 +87,11 @@
                 type: "GET",
                 success: function(data){
                     let html = "";
-                    html += `<h1>${data.nombre}</h1>`;
-                    html += `<img id='img_madrid' id='img_serie' src=${data.imagen} alt='img_equipo' width=500/><br/><br/>`;
+                    html += `<h1 class="text-uppercase text-decoration-underline text-primary">${data.nombre}</h1>`;
+                    html += `<img class="img-thumbnail" id='img_madrid' id='img_serie' src=${data.imagen} alt='img_equipo' width=500/><br/><br/>`;
                     html += `<h3>Puntuación: ${data.puntuacion}</h3>`
                     html += `<p>Año: ${data.anyo}</p>`
-                    html += `<a href='personajes.html?idserie=${data.idSerie}' class='btn btn-primary'>Personajes</a>`
+                    html += `<a href='personajes.html?idserie=${data.idSerie}' class='btn btn-info'>Personajes</a>`
                     $("#datosSerie").html(html);
                 }
             })

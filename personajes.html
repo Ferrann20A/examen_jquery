@@ -36,7 +36,7 @@
                         <a class="nav-link active" aria-current="page" href="nuevoPersonaje.html">Nuevo Personaje</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Modificar Personaje</a>
+                        <a class="nav-link active" aria-current="page" href="modificarPersonaje.html">Modificar Personaje</a>
                     </li>
                 </ul>
             </div>
@@ -45,6 +45,18 @@
     <br />
     <div class="container">
         <h1>Personajes</h1>
+        <div id="datosSerie">
+            <table id="personajes" class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Imagen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script src="js/jquery-3.7.1.min.js"></script>
@@ -67,7 +79,25 @@
                     $("#menu_desplegable").html(html);
                 }
             })
-        })
+
+            let params = new URLSearchParams(location.search);
+            let idSerie = params.get("idserie");
+            let requestGetPersonajesBySerie = `api/series/personajesserie/${idSerie}`
+            $.ajax({
+                url: URL_ApiSeries + requestGetPersonajesBySerie,
+                type: "GET",
+                success: function(data){
+                    let html = "";
+                    $.each(data, function(index, personaje){
+                        html += `<tr>`;
+                        html += `<td>${personaje.nombre}</td>`;
+                        html += `<td><img src=${personaje.imagen} alt="img_personaje" width='300'/></td>`;
+                        html += `</tr>`;
+                    });
+                    $("#personajes tbody").html(html);
+                }
+            })
+        });
     </script>
 </body>
 
