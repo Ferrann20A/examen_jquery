@@ -88,7 +88,7 @@
                 success: function(data){
                     let html = "";
                     html += `<h1 class="text-uppercase text-decoration-underline text-primary">${data.nombre}</h1>`;
-                    html += `<img class="img-thumbnail" id='img_madrid' id='img_serie' src=${data.imagen} alt='img_equipo' width=500/><br/><br/>`;
+                    html += `<img class="img-thumbnail" id='img_serie' src=${data.imagen} alt='img_equipo' width=500/><br/><br/>`;
                     html += `<h3>Puntuación: ${data.puntuacion}</h3>`
                     html += `<p>Año: ${data.anyo}</p>`
                     html += `<a href='personajes.html?idserie=${data.idSerie}' class='btn btn-info'>Personajes</a>`
